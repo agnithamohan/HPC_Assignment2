@@ -1,0 +1,202 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{minted}
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{High Performance Computing}
+\renewcommand\lstlistlistingname{High Performance Computing}
+\def\lstlistingautorefname{HPC}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+
+% Edit these as appropriate
+\newcommand\course{High Performance Computing}
+\newcommand\hwnumber{1}                  % <-- homework number
+\newcommand\NetIDa{amr1215}           % <-- NetID of person #1
+\newcommand\NetIDb{Agnitha Mohan Ram}           % <-- NetID of person #2 (Comment this line out for problem sets)
+
+\pagestyle{fancyplain}
+\headheight 35pt
+\lhead{\NetIDa}
+\lhead{\NetIDa\\\NetIDb}                 % <-- Comment this line out for problem sets (make sure you are person #1)
+\chead{\textbf{Assignment 2}}
+\rhead{\course \\ \today}
+\lfoot{}
+\cfoot{}
+\rfoot{\small\thepage}
+\headsep 1.5em
+
+\begin{document}
+
+
+
+{\underline{System and Compiler Specifications:}} \\
+
+\begin{tabular}{ |c|c| } 
+ \hline
+ Operating System & macOS Catalina  \\
+ \hline
+ Processor & 1.4 GHz Quad-Core Intel Core i5 \\
+ \hline
+ Memory & 8 GB 2133 MHz LPDDR3  \\ 
+ \hline 
+Compiler version & Apple clang version 11.0.0 \\
+
+ \hline
+ Max Memory Bandwidth of processor & 37.5 GB/s \\
+ \hline
+ Gflops per core & 4.83	Gflops/core\\
+ \hline
+ Gflops per computer & 19.32 Gflops/computer\\
+ \hline
+\end{tabular}
+\\\
+
+
+
+  
+     
+      
+
+
+
+\underline{\textbf{4. OpenMP version of 2D Jacobi/Gauss-Seidel smoothing}} \\
+\begin{enumerate}
+
+    \item Jacobi Method Performance \\
+  
+    \textbf{N vs Time(max iterations=1000):} \\\\
+    \begin{tabular}{ |c|c| } 
+ \hline
+  N & Time  \\ 
+ \hline \hline 
+  100    &  0.074102  \\
+  1000 & 6.598017  \\
+  2000 & 30.472632 \\ 
+\hline 
+\end{tabular}
+\\
+ Serial with O3\\
+    \textbf{N vs Time(max iterations=1000):} \\\\
+    \begin{tabular}{ |c|c| } 
+ \hline
+  N & Time  \\ 
+ \hline \hline 
+  100    &  0.012708  \\
+  1000 & 1.557171  \\
+  2000 & 6.677376 \\ 
+\hline 
+\end{tabular}
+  
+    
+    \textbf{Time taken for different N and number of threads combination(max iterations=1000):} \\\\
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+  N & 1 thread & 2 threads & 4 threads & 8 threads  \\ 
+ \hline \hline 
+  100 & 0.086903 & 0.095865   & 0.093669 &  0.122938 \\
+  1000 & 7.128139 & 4.982668 & 3.752380 & 3.788351 \\
+  2000 & 29.021817 & 19.406999 & 14.457567 & 14.740195 \\
+ 
+\hline 
+\end{tabular}
+\\\\
+With O3 optimisation: \\\
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+  N & 1 thread & 2 threads & 4 threads & 8 threads  \\ 
+ \hline \hline 
+  100 & 0.013756 & 0.033658  &  0.038807 & 0.049960 \\
+  1000 & 1.552268 & 1.279198 & 1.071452 & 1.049622 \\
+  2000 & 6.684382 & 5.228397 & 4.283326 &  4.343217 \\
+ 
+\hline 
+\end{tabular}
+\\\\
+
+\item Gauss-Seidel Method Performance \\
+
+    \textbf{N vs Time(max iterations=1000):} \\\\
+    \begin{tabular}{ |c|c| } 
+ \hline
+  N & Time  \\ 
+ \hline \hline 
+  100    & 0.041159   \\
+  1000 & 3.944075  \\
+  2000 & 16.062421 \\ 
+\hline 
+\end{tabular} \\
+  Serial with O3\\
+    \textbf{N vs Time(max iterations=1000):} \\\\
+    \begin{tabular}{ |c|c| } 
+ \hline
+  N & Time  \\ 
+ \hline \hline 
+  100    &  0.023147  \\
+  1000 &  2.574167 \\
+  2000 & 10.791395 \\ 
+\hline 
+\end{tabular}
+  
+
+    \textbf{Time taken for different N and number of threads combination(max iterations=1000):} \\\\
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+  N & 1 thread & 2 threads & 4 threads & 8 threads  \\ 
+ \hline \hline 
+  100 & 0.079111 & 0.071187  & 0.070732 & 0.079121 \\
+  1000 & 8.829857 &  4.814917 & 2.554686 & 2.547945 \\
+  2000 & 35.642225 & 19.973257 & 10.654128  & 10.711246 \\
+ 
+\hline 
+\end{tabular}
+\\\\
+With O3 optimisation: \\\
+\begin{tabular}{ |c|c|c|c|c| } 
+ \hline
+  N & 1 thread & 2 threads & 4 threads & 8 threads  \\ 
+ \hline \hline 
+  100 & 0.026183 &  0.064224  &  0.076025 & 0.105276 \\
+  1000 &  2.790062 & 1.279198 & 1.284318 & 1.339381 \\
+  2000 & 10.738788 & 6.651428 & 5.377109 &  5.549504 \\
+ 
+\hline 
+\end{tabular}
+\\\\
+
+
+
+
+\end{enumerate}
+
+
+
+
+\end{document}
+
+
