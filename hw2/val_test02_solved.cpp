@@ -1,3 +1,9 @@
+/* I've also added comments where changes were made. 
+1) Line 88 - The loop was modified to initialise all values in the array. Initially there were errors since all 
+elements in the array were not initialised. 
+  
+*/
+
 # include <cstdlib>
 # include <iostream>
 
@@ -78,7 +84,9 @@ void junk_data ( )
 //
 //  X = { 0, 1, 2, 3, 4, ?a, ?b, ?c, ?d, ?e }.
 //
-  for ( i = 0; i < 5; i++ )
+
+//changed to initialise all
+  for ( i = 0; i < 10; i++ )
   {
     x[i] = i;
   }

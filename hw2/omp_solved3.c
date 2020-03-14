@@ -1,3 +1,14 @@
+/*
+Solution: 
+There is an extra  #pragma omp barrier in the function print_results. The code terminates without issues when this line is 
+commented out. 
+With this however, the threads wait indefinitely. 
+Only two threads enter the print_results function. When they reach the barrier, all the threads waiting at the barrier in the main
+function cross the barrier and the two threads within the function cross that barrier. After this the threads that entered the 
+sections go on to wait at the barrier in the main function indefinitely. 
+
+
+
 /******************************************************************************
 * FILE: omp_bug3.c
 * DESCRIPTION:
@@ -8,7 +19,7 @@
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define N     50
+#define N 50
 
 int main (int argc, char *argv[]) 
 {
@@ -83,7 +94,7 @@ void print_results(float array[N], int tid, int section)
     printf("\n");
   } /*** end of critical ***/
 
-  #pragma omp barrier
+ //#pragma omp barrier
   printf("Thread %d done and synchronized.\n", tid); 
 
 }

@@ -1,3 +1,9 @@
+/* I've also added comments where changes were made. 
+There for two issues in this program:
+1) Line 77 - memory has been allocated for only n integers. Its required for n+1 integers. Changed n to n+1. 
+2) Line 92 - free must be used to free memory allocated using malloc.  
+*/
+
 # include <cstdlib>
 # include <iostream>
 
@@ -68,8 +74,8 @@ void f ( int n )
 {
   int i;
   int *x;
-
-  x = ( int * ) malloc ( n * sizeof ( int ) );
+//Allocate n+1. Instead of n. 
+  x = ( int * ) malloc ( (n+1) * sizeof ( int ) );
 
   x[0] = 1;
   cout << "  " << 0 << "  " << x[0] << "\n";
@@ -82,8 +88,8 @@ void f ( int n )
     x[i] = x[i-1] + x[i-2];
     cout << "  " << i << "  " << x[i] << "\n";
   }
-
-  delete [] x;
+//free for memory allocated with malloc
+  free(x);
 
   return;
 }

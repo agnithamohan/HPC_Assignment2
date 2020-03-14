@@ -1,3 +1,11 @@
+/*
+Solution: 
+I've made tid and total private to each thread. 
+Before the change, since these values were not private, all threads shared the same copy of tid and total and all tid and total values that 
+were printed were the same.
+*/
+//changed tid and total to private and float to double to prevent rounding off and to cross check answers. 
+
 /******************************************************************************
 * FILE: omp_bug2.c
 * DESCRIPTION:
@@ -11,12 +19,14 @@
 
 int main (int argc, char *argv[]) 
 {
+
 int nthreads, i, tid;
 float total;
 
 /*** Spawn parallel region ***/
-#pragma omp parallel 
+#pragma omp parallel private(tid, total)
   {
+
   /* Obtain thread number */
   tid = omp_get_thread_num();
   /* Only master thread does this */
@@ -27,7 +37,7 @@ float total;
   printf("Thread %d is starting...\n",tid);
 
   #pragma omp barrier
-
+ printf("\nThread %d \n", tid); 
   /* do some work */
   total = 0.0;
   #pragma omp for schedule(dynamic,10)

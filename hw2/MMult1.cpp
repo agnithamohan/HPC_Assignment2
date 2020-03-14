@@ -26,6 +26,25 @@ void MMult0(long m, long n, long k, double *a, double *b, double *c) {
 
 void MMult1(long m, long n, long k, double *a, double *b, double *c) {
   // TODO: See instructions below
+int N = n / BLOCK_SIZE ; 
+for(int i = 1 ; i <= N ; i++){
+  for(int j = 1 ; j <= N ; j++){
+    for(int I = (i-1)*N +1 ; I <= i*N ; I++){
+        for(int J = (j-1)*N + 1  ; J <= j*N ; J++)
+        {
+            for(int k=1; k<=N; k++)
+            {
+              for(int K=(k-1)*N + 1; K <= k*N ; K++)
+              {
+                c[][] = c[][] + a[][] + b[][];
+              }
+            }
+        }
+    }
+  }
+}
+
+  
 }
 
 int main(int argc, char** argv) {
@@ -55,7 +74,7 @@ int main(int argc, char** argv) {
     Timer t;
     t.tic();
     for (long rep = 0; rep < NREPEATS; rep++) {
-      MMult1(m, n, k, a, b, c);
+      MMult0(m, n, k, a, b, c);
     }
     double time = t.toc();
     double flops = 0; // TODO: calculate from m, n, k, NREPEATS, time
