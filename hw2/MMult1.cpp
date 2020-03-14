@@ -25,27 +25,50 @@ void MMult0(long m, long n, long k, double *a, double *b, double *c) {
 }
 
 void MMult1(long m, long n, long k, double *a, double *b, double *c) {
-  // TODO: See instructions below
-int N = n / BLOCK_SIZE ; 
-for(int i = 1 ; i <= N ; i++){
-  for(int j = 1 ; j <= N ; j++){
-    for(int I = (i-1)*N +1 ; I <= i*N ; I++){
-        for(int J = (j-1)*N + 1  ; J <= j*N ; J++)
-        {
-            for(int k=1; k<=N; k++)
+  
+  double C[BLOCK_SIZE][BLOCK_SIZE]; 
+  double A[BLOCK_SIZE][BLOCK_SIZE]; 
+  double B[BLOCK_SIZE][BLOCK_SIZE]; 
+  int N = n/BLOCK_SIZE; 
+  for(int i =0 ; i < n ; i+=BLOCK_SIZE)
+    for( int j = 0 ; j < n ; j+=BLOCK_SIZE)
+    {
+        for(int I=0; I<BLOCK_SIZE; I++)
+          for(int J=0; J<BLOCK_SIZE; J++)
+          {
+            C[I][J] = c[i+I + (j+J)*n]; 
+          }
+          for(int k=0; k<n ; k+=BLOCK_SIZE)
+          {
+            for(int I=0; I<BLOCK_SIZE; I++)
+            for(int J=0; J<BLOCK_SIZE; J++)
             {
-              for(int K=(k-1)*N + 1; K <= k*N ; K++)
-              {
-                c[][] = c[][] + a[][] + b[][];
-              }
+              A[I][J] = a[i+I + (k+J)*n];
+              B[I][J] = b[k+I + (j+J)*n];
             }
-        }
-    }
+            for (long i = 0; i < BLOCK_SIZE ; i++) 
+                for (long j = 0; j < BLOCK_SIZE ; j++) 
+                  for (long k = 0; k < BLOCK_SIZE; k++) {
+                  double A_ik = A[i][k];
+                  double B_kj = B[k][j];
+                  double C_ij = C[i][j];
+                  C_ij = C_ij + A_ik * B_kj;
+                  C[i][j] = C_ij; 
+                }  
+            }   
+          for(int I=0; I<BLOCK_SIZE; I++)
+          for(int J=0; J<BLOCK_SIZE; J++)
+          {
+            c[I+i + (J+j)*n] = C[I][J]; 
+          }
+
+
+      }
   }
-}
+  
 
   
-}
+
 
 int main(int argc, char** argv) {
   const long PFIRST = BLOCK_SIZE;
@@ -74,11 +97,11 @@ int main(int argc, char** argv) {
     Timer t;
     t.tic();
     for (long rep = 0; rep < NREPEATS; rep++) {
-      MMult0(m, n, k, a, b, c);
+      MMult1(m, n, k, a, b, c);
     }
     double time = t.toc();
-    double flops = 0; // TODO: calculate from m, n, k, NREPEATS, time
-    double bandwidth = 0; // TODO: calculate from m, n, k, NREPEATS, time
+    double flops = 2*pow(n,3) * NREPEATS / (time * pow(10,9)); // TODO: calculate from m, n, k, NREPEATS, time
+    double bandwidth = n*n*(2 + (2* (n/BLOCK_SIZE)))*NREPEATS/(time*pow(10,9)); // TODO: calculate from m, n, k, NREPEATS, time
     printf("%10d %10f %10f %10f", p, time, flops, bandwidth);
 
     double max_err = 0;
