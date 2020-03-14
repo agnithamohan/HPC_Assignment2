@@ -2,10 +2,15 @@
 
 #include <stdio.h>
 #include <math.h>
+#ifdef _OPENMP
 #include <omp.h>
+#endif 
+
+
 #include "utils.h"
 
-#define BLOCK_SIZE 16
+#define BLOCK_SIZE 64
+
 
 // Note: matrices are stored in column major order; i.e. the array elements in
 // the (m x n) matrix C are stored in the sequence: {C_00, C_10, ..., C_m0,
@@ -30,9 +35,12 @@ void MMult1(long m, long n, long k, double *a, double *b, double *c) {
   double A[BLOCK_SIZE][BLOCK_SIZE]; 
   double B[BLOCK_SIZE][BLOCK_SIZE]; 
   int N = n/BLOCK_SIZE; 
+  #ifdef _OPENMP
+  #pragma omp parallel for private(A,B,C)
+  #endif 
   for(int i =0 ; i < n ; i+=BLOCK_SIZE)
     for( int j = 0 ; j < n ; j+=BLOCK_SIZE)
-    {
+    {    // printf("%d\n", omp_get_thread_num()); 
         for(int I=0; I<BLOCK_SIZE; I++)
           for(int J=0; J<BLOCK_SIZE; J++)
           {
@@ -100,7 +108,7 @@ int main(int argc, char** argv) {
       MMult1(m, n, k, a, b, c);
     }
     double time = t.toc();
-    double flops = 2*pow(n,3) * NREPEATS / (time * pow(10,9)); // TODO: calculate from m, n, k, NREPEATS, time
+    double flops = 2*m*n*k * NREPEATS / (time * pow(10,9)); // TODO: calculate from m, n, k, NREPEATS, time
     double bandwidth = n*n*(2 + (2* (n/BLOCK_SIZE)))*NREPEATS/(time*pow(10,9)); // TODO: calculate from m, n, k, NREPEATS, time
     printf("%10d %10f %10f %10f", p, time, flops, bandwidth);
 
